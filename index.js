@@ -3,7 +3,8 @@ const cors = require('cors');
 require('dotenv').config();
 const app = express();
 const port = process.env.PORT || 5000;
-const { MongoClient, ServerApiVersion } = require('mongodb');
+const { MongoClient, ServerApiVersion, ObjectId } = require('mongodb');
+const res = require('express/lib/response');
 
 
 
@@ -15,12 +16,43 @@ app.use(express.json());
 
 const uri = `mongodb+srv://${process.env.DB_USER}:${process.env.DB_PASSWORD}@cluster0.8e7vo.mongodb.net/myFirstDatabase?retryWrites=true&w=majority`;
 const client = new MongoClient(uri, { useNewUrlParser: true, useUnifiedTopology: true, serverApi: ServerApiVersion.v1 });
-client.connect(err => {
-    const collection = client.db("test").collection("devices");
-    console.log('warehouse db connect..')
-    // perform actions on the collection object
-    client.close();
-});
+////////////// async run function : try ... finally ///////////////////
+async function run() {
+    try {
+        await client.connect();
+        const productsCollection = client.db('warehouse').collection('products');
+        ///////////  for get all  products from db on UI ///////////////
+        app.get('/products', async (req, res) => {
+            const query = {};
+            const cursor = productsCollection.find(query);
+            const products = await cursor.toArray();
+            res.send(products);
+        });
+        ///////////  for get single data/product from db on UI ////////////
+        app.get('/products/:id', async (req, res) => {
+            const id = req.params.id;
+            const query = { _id: ObjectId(id) };
+            const product = await productsCollection.findOne(query);
+            res.send(product);
+
+        });
+        ////////////////   post data on db  ////////////////
+        app.post('/product', async (req, res) => {
+            const newProduct = req.body;
+            const result = await productsCollection.insertOne(newProduct);
+            res.send(result);
+        });
+
+
+
+    }
+    finally {
+
+    }
+
+}
+run().catch(console.dir);
+
 
 
 
