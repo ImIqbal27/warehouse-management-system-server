@@ -69,10 +69,10 @@ async function run() {
             const updatedDoc = {
                 $set: {
                     // quantity: updateRestock,
-                    quantity: restockQty,
+                    quantity: restockQty.updateRestock,
                 }
             }
-            console.log(restockQty);
+
 
             const result = await productsCollection.updateOne(filter, updatedDoc, options);
 
