@@ -45,8 +45,8 @@ async function run() {
         ///////////////////    add/update product quantity     //////////
         app.put('/products/:id', async (req, res) => {
             const id = req.params.id;
-            const updatedQty = req.body;
             const filter = { _id: ObjectId(id) };
+            const updatedQty = req.body;
             const options = { upsert: true };
             const updatedDoc = {
                 $set: {
@@ -63,15 +63,15 @@ async function run() {
         //////////////     restock   product  ////////////////
         app.put('/products/:id', async (req, res) => {
             const id = req.params.id;
-            const restockQty = req.body;
             const filter = { _id: ObjectId(id) };
+            const restockQty = req.body;
             const options = { upsert: true };
             const updatedDoc = {
                 $set: {
-                    // quantity: restockQty.updateRestock,
-                    quantity: 'rumon',
+                    quantity: updateRestock,
                 }
             }
+            console.log(restockQty);
 
             const result = await productsCollection.updateOne(filter, updatedDoc, options);
 
@@ -110,3 +110,8 @@ app.get('/', (req, res) => {
 app.listen(port, () => {
     console.log('Listening');
 })
+
+///    git  add .
+///    git commit -m "  solved" 
+//// git push
+//// git push  heroku main
