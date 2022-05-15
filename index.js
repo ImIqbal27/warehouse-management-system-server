@@ -42,11 +42,10 @@ async function run() {
             const result = await productsCollection.insertOne(newProduct);
             res.send(result);
         });
-        ///////////////////  update product quantity  //////////
+        ///////////////////    add/update product quantity     //////////
         app.put('/products/:id', async (req, res) => {
             const id = req.params.id;
             const updatedQty = req.body;
-            console.log(updatedQty);
             const filter = { _id: ObjectId(id) };
             const options = { upsert: true };
             const updatedDoc = {
@@ -59,7 +58,26 @@ async function run() {
 
             res.send(result);
 
-        })
+        });
+
+        //////////////     restock   product  ////////////////
+        app.put('/products/:id', async (req, res) => {
+            const id = req.params.id;
+            const updatedQty = req.body;
+            const filter = { _id: ObjectId(id) };
+            const options = { upsert: true };
+            const updatedDoc = {
+                $set: {
+                    quantity: updatedQty.updateRestock,
+                }
+            }
+
+            const result = await productsCollection.updateOne(filter, updatedDoc, options);
+
+            res.send(result);
+
+        });
+
         /////////////////    delete single data/product /////////
         app.delete('/products/:id', async (req, res) => {
             const id = req.params.id;
