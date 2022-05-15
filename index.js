@@ -51,7 +51,7 @@ async function run() {
             const options = { upsert: true };
             const updatedDoc = {
                 $set: {
-                    quantity: updatedQty,
+                    quantity: updatedQty.newQtyNumber,
                 }
             }
 
