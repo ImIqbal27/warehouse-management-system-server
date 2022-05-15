@@ -68,7 +68,8 @@ async function run() {
             const options = { upsert: true };
             const updatedDoc = {
                 $set: {
-                    quantity: updateRestock,
+                    // quantity: updateRestock,
+                    quantity: restockQty,
                 }
             }
             console.log(restockQty);
@@ -111,7 +112,7 @@ app.listen(port, () => {
     console.log('Listening');
 })
 
-///    git  add .
-///    git commit -m "  solved" 
-//// git push
-//// git push  heroku main
+//     git  add .
+//     git commit -m "  solved"
+//      git push
+//     git push  heroku main
