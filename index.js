@@ -68,7 +68,8 @@ async function run() {
             const options = { upsert: true };
             const updatedDoc = {
                 $set: {
-                    quantity: restockQty.updateRestock,
+                    // quantity: restockQty.updateRestock,
+                    quantity: 'rumon',
                 }
             }
 
